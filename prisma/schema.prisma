@@ -13,23 +13,44 @@ datasource db {
 
 model Devices {
   id               Int            @id @default(autoincrement())
-  device_id       String         @unique
+  deviceId         String         @unique
   gatGateway_id    Int 
   satelliteGateway DeviceGateway  @relation(fields: [gatGateway_id], references: [id])
   status           DeviceStatus
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
-
+  messages         SendMessages[]
 }
 
 model DeviceGateway {
   id               Int            @id @default(autoincrement())
   name            String
-  device_id       Int
+  deviceId       Int
   devices         Devices[] 
 }
 
 enum DeviceStatus {
   ACTIVE
   DISABLED
+}
+
+model SendMessages {
+   id             Int                  @id @default(autoincrement())
+   payload        String
+   deviceId       String
+   device         Devices @relation(fields: [deviceId], references: [deviceId])
+   status         MessageStatus        @default(CREATED)
+   createdAt      DateTime             @default(now())
+   updatedAt      DateTime             @updatedAt
+
+}
+
+
+enum MessageStatus {
+  CREATED
+  SUBMITTED
+  SENDED
+  TIMEOUT
+  FAILED
+  CANCELLED
 }

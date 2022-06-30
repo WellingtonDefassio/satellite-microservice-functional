@@ -1,0 +1,14 @@
+-- CreateTable
+CREATE TABLE `SendMessages` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `payload` VARCHAR(191) NOT NULL,
+    `deviceId` VARCHAR(191) NOT NULL,
+    `status` ENUM('CREATED', 'SUBMITTED', 'SENDED', 'TIMEOUT', 'FAILED', 'CANCELLED') NOT NULL DEFAULT 'CREATED',
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `SendMessages` ADD CONSTRAINT `SendMessages_deviceId_fkey` FOREIGN KEY (`deviceId`) REFERENCES `Devices`(`deviceId`) ON DELETE RESTRICT ON UPDATE CASCADE;
