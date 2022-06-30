@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Devices {
+  id               Int            @id @default(autoincrement())
+  device_id       String         @unique
+  gatGateway_id    Int 
+  satelliteGateway DeviceGateway  @relation(fields: [gatGateway_id], references: [id])
+  status           DeviceStatus
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+}
+
+model DeviceGateway {
+  id               Int            @id @default(autoincrement())
+  name            String
+  device_id       Int
+  devices         Devices[] 
+}
+
+enum DeviceStatus {
+  ACTIVE
+  DISABLED
+}
