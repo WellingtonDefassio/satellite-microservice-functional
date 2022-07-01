@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import {
-  findByStatus,
+  findInDBByGatewayAndStatus,
   validateGateway,
 } from 'src/satellite/functions/satellite-db-functions';
 import { PrismaService } from 'src/satellite/prisma/prisma.service';
@@ -14,9 +14,11 @@ export class OrbcommService {
     console.log('upload message start....');
 
     const gateway = validateGateway('ORBCOMM_V2')(this.prisma);
-    const allMessagesWithCreatedStatus = findByStatus(gateway)('CREATED')(
-      this.prisma,
+
+    gateway.then((gateway) =>
+      findInDBByGatewayAndStatus(gateway)('CREATED')(this.prisma).then(
+        console.log,
+      ),
     );
-    allMessagesWithCreatedStatus.then(console.log);
   }
 }
