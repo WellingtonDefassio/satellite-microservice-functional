@@ -24,9 +24,8 @@ model Devices {
 
 model DeviceGateway {
   id               Int            @id @default(autoincrement())
-  name            String
-  deviceId       Int
-  devices         Devices[] 
+  name              String @unique
+  devices           Devices[] 
 }
 
 enum DeviceStatus {
